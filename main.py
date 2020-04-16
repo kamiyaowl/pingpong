@@ -1,22 +1,27 @@
+import os
 import socket
 import schedule
 import time
 import datetime
+import json
 from rich.console import Console
-from rich.table   import Column, Table
+from rich.table import Column, Table
 
 console = Console()
 
 # Config
-targets = [
-    {"host": "localhost", "port": 135, "remark": "test", },
-    {"host": "127.0.0.1", "port": 445, "remark": "", },
-    {"host": "192.168.100.200", "port": 1111, },
-    {"host": "192.168.1.1", "port": 22, },
-]
-timeout_sec = 1
-duration_sec = 1
-datetime_format = "Update At: %Y/%m/%d %H:%M:%S"
+f = open("config.json", "r")
+config = json.load(f)
+
+# port scan時のtimeout
+timeout_sec = config["timeout_sec"]
+# scanする周期
+duration_sec = config["duration_sec"]
+# 表のタイトルに表示する時刻文字列
+datetime_format = config["datetime_format"]
+# Scan対象のリスト
+targets = config["targets"]
+
 
 # 指定したhost,portと接続できればTrueを返します
 def scan(host, port):
@@ -27,9 +32,12 @@ def scan(host, port):
     return ret == 0
 
 # 指定されたhost,portのリストのdead or aliveを表敬式で表示します
+
+
 def scan_all_and_print(targets):
     # header
-    table = Table(show_header=True, header_style="bold magenta", title=datetime.datetime.now().strftime(datetime_format))
+    table = Table(show_header=True, header_style="bold magenta",
+                  title=datetime.datetime.now().strftime(datetime_format))
     table.add_column("host", style="dim")
     table.add_column("port", justify="right")
     table.add_column("alive")
@@ -38,15 +46,21 @@ def scan_all_and_print(targets):
     for t in targets:
         resp = scan(t["host"], t["port"])
         table.add_row(
-            t["host"], 
+            t["host"],
             str(t["port"]),
             ("[green]OK[/green]" if resp else "[red]NG[/red]"),
             (t["remark"] if ("remark" in t) > 0 else "")
         )
+    os.system("cls")
     console.print(table)
 
+def job():
+    scan_all_and_print(targets)    
+
 # Run
-schedule.every(duration_sec).seconds.do(lambda: scan_all_and_print(targets))
+
+job() # 初回は一回出しておく
+schedule.every(duration_sec).seconds.do(job)
 while True:
     schedule.run_pending()
     time.sleep(1)
