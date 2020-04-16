@@ -1,4 +1,3 @@
-import os
 import sys
 import time
 import json
@@ -35,14 +34,13 @@ def scan_all_and_print(config):
             ("[green]OK[/green]" if resp else "[red]NG[/red]"),
             (t["remark"] if ("remark" in t) > 0 else "")
         )
-    os.system("cls")
     console = Console()
     console.print(table)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Parse Arguments
-    parser = argparse.ArgumentParser(description='simple alive checker.')
+    parser = argparse.ArgumentParser(description="simple alive checker.")
     parser.add_argument(
         "-c", "--config", default="config.json", help="path to config.json")
     parser.add_argument("-o", "--once", action="store_true", help="scan once")
