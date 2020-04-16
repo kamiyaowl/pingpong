@@ -39,10 +39,12 @@ def scan_all_and_print(config):
     console = Console()
     console.print(table)
 
+
 if __name__ == '__main__':
     # Parse Arguments
     parser = argparse.ArgumentParser(description='simple alive checker.')
-    parser.add_argument("-c", "--config", default="config.json", help="path to config.json")
+    parser.add_argument(
+        "-c", "--config", default="config.json", help="path to config.json")
     parser.add_argument("-o", "--once", action="store_true", help="scan once")
     args = parser.parse_args()
     # Read and Prepare Config

@@ -16,3 +16,8 @@ optional arguments:
                         path to config.json
   -o, --once            scan once
 ```
+
+## Configuration
+
+edit [config.json](https://github.com/kamiyaowl/pingpong/blob/master/config.json)
+
