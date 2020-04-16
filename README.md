@@ -1,5 +1,7 @@
 # pingpong
 
+![screenshot.png](https://github.com/kamiyaowl/pingpong/blob/master/screenshot.PNG?raw=true)
+
 simple alive checker.
 
 ## Usage
